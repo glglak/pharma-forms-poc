@@ -1,0 +1,76 @@
+# .NET Core build artifacts
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+*.dbmdl
+*.jfm
+.vs/
+.vscode/
+
+# Angular build artifacts
+node_modules/
+dist/
+.angular/
+*.log
+.editorconfig
+.sass-cache/
+connect.lock
+coverage/
+libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+
+# Database files
+*.mdf
+*.ldf
+*.ndf
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Cache files
+.eslintcache
+.stylelintcache
+
+# Local configuration files
+appsettings.Development.json
+appsettings.*.json
+!appsettings.json
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio 2019 cache/options directory
+.vs/
+
+# Visual Studio Code directories
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+
+# Rider directories
+.idea/
+*.sln.iml
