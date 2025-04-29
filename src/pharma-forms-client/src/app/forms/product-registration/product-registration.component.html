@@ -1,0 +1,257 @@
+<div class="form-container">
+  <app-page-header 
+    [title]="isEditMode ? ('FORMS.EDIT_PRODUCT_REGISTRATION' | translate) : ('FORMS.NEW_PRODUCT_REGISTRATION' | translate)"
+    [subtitle]="'FORMS.PRODUCT_REGISTRATION_DESCRIPTION' | translate">
+  </app-page-header>
+
+  <mat-card *ngIf="isLoading">
+    <mat-card-content>
+      <app-loading-spinner></app-loading-spinner>
+    </mat-card-content>
+  </mat-card>
+
+  <form [formGroup]="form" (ngSubmit)="submitForm()" *ngIf="!isLoading">
+    <!-- Basic Information Section -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>{{ 'FORMS.BASIC_INFORMATION' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.PRODUCT_NAME' | translate }}</mat-label>
+              <input matInput formControlName="productName" required>
+              <mat-error *ngIf="form.get('productName')?.hasError('required')">
+                {{ 'VALIDATION.REQUIRED' | translate }}
+              </mat-error>
+              <mat-error *ngIf="form.get('productName')?.hasError('maxlength')">
+                {{ 'VALIDATION.MAX_LENGTH' | translate:{length:200} }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.ACTIVE_INGREDIENT' | translate }}</mat-label>
+              <mat-select formControlName="activeIngredientId" required>
+                <mat-option *ngFor="let ingredient of activeIngredients" [value]="ingredient.id">
+                  {{ingredient.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.get('activeIngredientId')?.hasError('required')">
+                {{ 'VALIDATION.REQUIRED' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.STRENGTH_VALUE' | translate }}</mat-label>
+              <input matInput type="number" min="0" formControlName="strengthValue" required>
+              <mat-error *ngIf="form.get('strengthValue')?.hasError('required')">
+                {{ 'VALIDATION.REQUIRED' | translate }}
+              </mat-error>
+              <mat-error *ngIf="form.get('strengthValue')?.hasError('min')">
+                {{ 'VALIDATION.MIN_VALUE' | translate:{value:0} }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.STRENGTH_UNIT' | translate }}</mat-label>
+              <mat-select formControlName="strengthUnit" required>
+                <mat-option value="mg">mg</mat-option>
+                <mat-option value="g">g</mat-option>
+                <mat-option value="ml">ml</mat-option>
+                <mat-option value="mcg">mcg</mat-option>
+                <mat-option value="%">%</mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.get('strengthUnit')?.hasError('required')">
+                {{ 'VALIDATION.REQUIRED' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.DOSAGE_FORM' | translate }}</mat-label>
+              <mat-select formControlName="dosageForm" required>
+                <mat-option *ngFor="let form of dosageForms" [value]="form.value">
+                  {{form.label}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.get('dosageForm')?.hasError('required')">
+                {{ 'VALIDATION.REQUIRED' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.PACK_SIZE' | translate }}</mat-label>
+              <input matInput type="number" min="1" formControlName="packSize" required>
+              <mat-error *ngIf="form.get('packSize')?.hasError('required')">
+                {{ 'VALIDATION.REQUIRED' | translate }}
+              </mat-error>
+              <mat-error *ngIf="form.get('packSize')?.hasError('min')">
+                {{ 'VALIDATION.MIN_VALUE' | translate:{value:1} }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.RELATED_COMPOUND' | translate }}</mat-label>
+              <input matInput formControlName="relatedCompoundId" readonly>
+              <mat-hint>{{ 'FORMS.RELATED_COMPOUND_HINT' | translate }}</mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <!-- Manufacturer Information Section -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>{{ 'FORMS.MANUFACTURER_INFORMATION' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.MANUFACTURER' | translate }}</mat-label>
+              <mat-select formControlName="manufacturerId" required>
+                <mat-option *ngFor="let manufacturer of manufacturerOptions" [value]="manufacturer.id">
+                  {{manufacturer.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.get('manufacturerId')?.hasError('required')">
+                {{ 'VALIDATION.REQUIRED' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.BATCH_NUMBER' | translate }}</mat-label>
+              <input matInput formControlName="batchNumber" required>
+              <mat-error *ngIf="form.get('batchNumber')?.hasError('required')">
+                {{ 'VALIDATION.REQUIRED' | translate }}
+              </mat-error>
+              <mat-error *ngIf="form.get('batchNumber')?.hasError('pattern')">
+                {{ 'VALIDATION.BATCH_NUMBER_FORMAT' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.MANUFACTURING_DATE' | translate }}</mat-label>
+              <input matInput [matDatepicker]="manufacturingDatePicker" formControlName="manufacturingDate" required>
+              <mat-datepicker-toggle matSuffix [for]="manufacturingDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #manufacturingDatePicker></mat-datepicker>
+              <mat-error *ngIf="form.get('manufacturingDate')?.hasError('required')">
+                {{ 'VALIDATION.REQUIRED' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.EXPIRY_DATE' | translate }}</mat-label>
+              <input matInput [matDatepicker]="expiryDatePicker" formControlName="expiryDate" required>
+              <mat-datepicker-toggle matSuffix [for]="expiryDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #expiryDatePicker></mat-datepicker>
+              <mat-error *ngIf="form.get('expiryDate')?.hasError('required')">
+                {{ 'VALIDATION.REQUIRED' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <!-- Regulatory Information Section -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>{{ 'FORMS.REGULATORY_INFORMATION' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.REGISTRATION_NUMBER' | translate }}</mat-label>
+              <input matInput formControlName="registrationNumber">
+              <mat-error *ngIf="form.get('registrationNumber')?.hasError('pattern')">
+                {{ 'VALIDATION.REGISTRATION_NUMBER_FORMAT' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.REGISTRATION_DATE' | translate }}</mat-label>
+              <input matInput [matDatepicker]="registrationDatePicker" formControlName="registrationDate">
+              <mat-datepicker-toggle matSuffix [for]="registrationDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #registrationDatePicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.APPROVAL_STATUS' | translate }}</mat-label>
+              <mat-select formControlName="approvalStatus" required>
+                <mat-option value="pending">{{ 'FORMS.STATUS.PENDING' | translate }}</mat-option>
+                <mat-option value="under_review">{{ 'FORMS.STATUS.UNDER_REVIEW' | translate }}</mat-option>
+                <mat-option value="approved">{{ 'FORMS.STATUS.APPROVED' | translate }}</mat-option>
+                <mat-option value="rejected">{{ 'FORMS.STATUS.REJECTED' | translate }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.get('approvalStatus')?.hasError('required')">
+                {{ 'VALIDATION.REQUIRED' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FORMS.PARENT_REGISTRATION' | translate }}</mat-label>
+              <input matInput formControlName="parentRegistrationId" readonly>
+              <mat-hint>{{ 'FORMS.PARENT_REGISTRATION_HINT' | translate }}</mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button mat-button type="button" (click)="cancel()">
+        {{ 'ACTIONS.CANCEL' | translate }}
+      </button>
+      <button mat-button type="button" (click)="resetForm()">
+        {{ 'ACTIONS.RESET' | translate }}
+      </button>
+      <button mat-stroked-button color="primary" type="button" (click)="saveDraft()" [disabled]="isSubmitting">
+        <mat-icon>save</mat-icon>
+        {{ 'ACTIONS.SAVE_DRAFT' | translate }}
+      </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
+        <mat-icon *ngIf="isSubmitting">
+          <mat-spinner diameter="20"></mat-spinner>
+        </mat-icon>
+        <mat-icon *ngIf="!isSubmitting">send</mat-icon>
+        {{ 'ACTIONS.SUBMIT' | translate }}
+      </button>
+    </div>
+  </form>
+</div>
