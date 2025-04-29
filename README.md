@@ -26,6 +26,22 @@ A proof of concept for a pharmaceutical data collection system with multi-form s
 - `/src/PharmaForms.Infrastructure` - Data access and external services
 - `/src/pharma-forms-client` - Angular 20+ frontend application
 
+## Key Components
+
+### Backend
+
+- **Form Definition System**: Defines the structure of forms with sections and fields
+- **Form Submission System**: Captures and manages submitted form data
+- **Form Dependency Engine**: Handles cross-form relationships and validations
+- **Data Storage**: SQL Server for relational data with potential Elasticsearch for search
+
+### Frontend
+
+- **Dynamic Form Renderer**: Creates forms based on definitions from the backend
+- **Form State Manager**: Manages form data and cross-form dependencies
+- **RTL Support**: Full Arabic language and right-to-left layout support
+- **Validation Engine**: Client-side validation with server validation integration
+
 ## Form Generation Approach
 
 This project uses a form-by-form generation approach, where each pharmaceutical form is generated individually with its specific fields and validations, while sharing common components and services for:
@@ -54,6 +70,33 @@ To handle these dependencies, we've implemented a `FormDependencyService` that:
 - Propagates value changes across forms
 - Validates cross-form constraints
 - Handles lookups based on values in other forms
+
+## Implementation Progress
+
+We have successfully implemented the core structure of the POC:
+
+- **Backend**:
+  - Core domain models for forms, submissions, and dependencies
+  - Repository pattern for data access
+  - Dependency management service
+  - RESTful API endpoints for form operations
+  - SQL Server integration
+
+- **Frontend**:
+  - Angular project structure
+  - Form dependency service for cross-form communication
+  - Dynamic form component for form rendering
+  - RTL support for Arabic forms
+  - Product registration form as an example implementation
+
+## Next Steps
+
+- Complete the form conversion from Excel to form definitions
+- Implement Excel import/export functionality
+- Add unit and integration tests
+- Set up continuous integration
+- Add dashboard and reporting features
+- Implement user management and authentication
 
 ## Getting Started
 
@@ -111,25 +154,6 @@ To handle these dependencies, we've implemented a `FormDependencyService` that:
    ```
 
 5. Open your browser to `http://localhost:4200`
-
-## Form Development Process
-
-When creating a new form:
-
-1. Define the form fields and validation rules
-2. Create a dedicated component for the form
-3. Register any dependencies with other forms
-4. Add routing in the forms module
-5. Implement localization for Arabic and English
-
-## Working with Arabic (RTL) Support
-
-The application fully supports right-to-left (RTL) layouts for Arabic with:
-
-- RTL layout switching based on language
-- Bidirectional text support
-- Angular Material components configured for RTL
-- Custom RTL-specific styles
 
 ## License
 
